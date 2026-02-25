@@ -619,24 +619,22 @@ console.log(`
 ╚═══════════════════════════════════════╝
 `);
 
-
 // ===========================
 // Swiper Carousel 3D - 5 cartes visibles comme l'image
 // ===========================
 new Swiper(".veilleSwiper", {
     effect: "coverflow",
     centeredSlides: true,
-    slidesPerView: "auto",
+    slidesPerView: "auto",  // Auto avec largeur fixe 280px dans CSS
     grabCursor: true,
     loop: true,
     speed: 600,
-    
-    // Configuration pour afficher 5 cartes
+
     coverflowEffect: {
-        rotate: 0,          // Pas de rotation de base
-        stretch: 80,        // Espacement entre cartes
-        depth: 200,         // Profondeur 3D
-        modifier: 1,        // Multiplicateur d'effet
+        rotate: 0,
+        stretch: 80,        // Espacement pour 5 cartes (2+1+2) de 280px
+        depth: 200,
+        modifier: 1,
         slideShadows: false,
     },
 
@@ -646,24 +644,27 @@ new Swiper(".veilleSwiper", {
         dynamicBullets: false,
     },
 
-    // Navigation au clavier
+    navigation: {
+        nextEl: ".veille-btn-next",
+        prevEl: ".veille-btn-prev",
+    },
+
     keyboard: {
         enabled: true,
     },
 
-    // Breakpoints pour responsive
     breakpoints: {
         320: {
-            coverflowEffect: {
-                stretch: 60,
-                depth: 150,
-            }
+            slidesPerView: 1,
+            coverflowEffect: { stretch: 0, depth: 100 }
         },
         768: {
-            coverflowEffect: {
-                stretch: 80,
-                depth: 200,
-            }
+            slidesPerView: "auto",
+            coverflowEffect: { stretch: 60, depth: 150 }
+        },
+        1024: {
+            slidesPerView: "auto",
+            coverflowEffect: { stretch: 80, depth: 200 }
         }
     }
 });

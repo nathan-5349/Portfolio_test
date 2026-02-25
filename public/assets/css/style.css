@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=Creepster&family=Dancing+Script:wght@400..700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=Creepster&family=Dancing+Script');
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
 
 /* === Partie qui correspond à l'ensemble du site === */
@@ -357,86 +357,150 @@ a {
 
 /* === Partie qui correspond à la formation=== */
 
-.formationGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--spacing-lg);
-    max-width: 900px;
-    margin: 0 auto;
-}
+/* --- Ajustement spécifique pour la section Formation --- */
 
-.formationCarte {
-    perspective: 1000px;
-    height: 500px;
-}
-
-.carteContenu {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-}
-
-.formationCarte:hover .carteContenu {
-    transform: rotateY(180deg);
-}
-
-.carteAvant, .carteArriere {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-md);
+#formation {
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* On réajuste le header */
+#formation .titreSection {
+    padding-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    flex-shrink: 0;
+}
+
+/* Le conteneur occupe toute la hauteur restante */
+#formation .container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;   /* crucial : autorise le container flex à rétrécir */
+    max-width: 100%;
+    padding: 0;
+}
+
+#layout2 { padding:0; overflow:hidden; }
+#layout2 .section-header { padding-top:90px; }
+#layout2 .section-header { background:var(--darker); padding-bottom:0; margin-bottom:0; }
+
+.split-wrap {
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    flex: 1;            /* Prend toute la hauteur restante dans le container flex */
+    min-height: 0;      /* Important pour le calcul flexbox */
+    position: relative;
+}
+
+.split-right {
+    border-left: 3px solid;
+    border-image-source: linear-gradient(180deg, 
+        transparent, 
+        var(--color-primary), 
+        var(--color-secondary), 
+        transparent
+    );
+    border-image-slice: 1;
+}
+
+/* étiquette centrale */
+.split-center-label {
+    position: absolute; 
+    left: 50%; 
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 6px;
+}
+
+.split-center-label .vs-badge {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--color-darker); 
+    border: 2px solid var(--color-secondary);
+    display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--color-gray), var(--color-dark));
-    box-shadow: var(--shadow-lg);
-}
-
-.carteAvant h3, .carteArriere h3 {
-    color: var(--color-accent);
-    margin-bottom: var(--spacing-md);
-}
-
-.carteImage {
-    width: 100%;
-    height: 250px;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    margin-bottom: var(--spacing-md);
-}
-
-.carteImage img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform var(--transition-slow);
-}
-
-.formationCarte:hover .carteImage img {
-    transform: scale(1.1);
-}
-
-.carteSousTitre {
     text-align: center;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.1rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--color-white);
+    box-shadow: 0 0 25px rgba(160, 30, 156, 0.7);
+    position: relative; 
+    z-index: 11;
 }
 
-.carteArriere {
-    transform: rotateY(180deg);
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+.split-panel {
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column; justify-content:flex-end;
+    min-height: 0;       /* S'adapte à la hauteur du grid */
+    height: 100%;        /* Remplit la cellule du grid */
+    transition:flex .5s cubic-bezier(.4,0,.2,1);
+    cursor:default;
+    padding: var(--spacing-md); 
 }
+.split-panel:hover { flex:1.15; }
 
-.carteArriere p {
-    text-align: center;
-    font-size: 1.2rem;
-    line-height: 1.8;
+.split-bg {
+    position:absolute; inset:0; z-index:0;
 }
+.split-bg img {
+    width:100%; height:100%; object-fit:cover;
+    filter:saturate(1.1) brightness(.35);
+    transition:filter .5s, transform .5s;
+}
+.split-panel:hover .split-bg img { filter:saturate(1.4) brightness(.45); transform:scale(1.04); }
+
+.split-overlay {
+    position:absolute; inset:0; z-index:1;
+}
+.split-left .split-overlay { background:linear-gradient(135deg,rgba(101,19,148,.55) 0%,transparent 70%); }
+.split-right .split-overlay { background:linear-gradient(225deg,rgba(160,30,156,.55) 0%,transparent 70%); }
+
+/* ligne déco */
+.split-panel::before {
+    content:''; position:absolute; z-index:2;
+    width:4px; height:0; top:0;
+    transition:height .5s .1s;
+    background:linear-gradient(180deg,var(--secondary),transparent);
+}
+.split-left::before { left:0; }
+.split-right::before { right:0; }
+.split-panel:hover::before { height:100%; }
+
+.split-content {
+    position:relative; z-index:3;
+    transform:translateY(12px); transition:transform .4s;
+}
+.split-panel:hover .split-content { transform:translateY(0); }
+
+.split-content .split-option {
+    font-size:.7rem; text-transform:uppercase; letter-spacing:2.5px;
+    color:var(--secondary); font-weight:700; margin-bottom:.6rem;
+}
+.split-content h3 {
+    font-family:var(--font-d); font-size:clamp(1.6rem,2.5vw,2.1rem);
+    color:#fff; line-height:1.2; margin-bottom:.8rem;
+}
+.split-content p {
+    color:rgba(255,255,255,.7); font-size:.92rem; line-height:1.65;
+    max-width:360px; margin-bottom:1.2rem;
+    max-height:0; overflow:hidden; transition:max-height .5s .1s;
+}
+.split-panel:hover .split-content p { max-height:100px; }
+.split-tags { display:flex; flex-wrap:wrap; gap:6px; opacity:0; transform:translateY(8px); transition:all .4s .15s; }
+.split-panel:hover .split-tags { opacity:1; transform:translateY(0); }
+.split-tag { padding:3px 11px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:20px; font-size:.72rem; color:rgba(255,255,255,.85); }
+
 
 /* === Partie qui correspond au profil === */
 
@@ -1063,14 +1127,14 @@ a {
     transition: color 0.3s;
 }
 /* ============================
-   Section Veille - Style EXACT de l'image
-   ============================ */
+Section Veille - Style EXACT de l'image
+============================ */
 
 .veilleSwiper {
-    max-width: 100%;
+    max-width: 1200px;  /* Ajusté pour 5 cartes de 280px */
     width: 100%;
     margin: 0 auto;
-    padding: 100px 40px;
+    padding: 80px 30px;
     perspective: 1800px;
     overflow: visible !important;
 }
@@ -1081,12 +1145,15 @@ a {
 
 /* 5 cartes visibles comme dans l'image */
 .swiper-slide {
-    width: 320px !important;
-    height: 520px;
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+    height: 480px;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    flex-shrink: 0;
 }
 
 /* === CARTE - Style exact de l'image === */
@@ -1102,8 +1169,8 @@ a {
     
     /* Fond noir profond */
     background: linear-gradient(180deg, 
-        rgba(12, 12, 20, 0.98) 0%, 
-        rgba(8, 8, 15, 1) 100%
+    rgba(12, 12, 20, 0.98) 0%, 
+    rgba(8, 8, 15, 1) 100%
     );
     
     /* Bordure violette lumineuse COMME L'IMAGE */
@@ -1111,9 +1178,9 @@ a {
     
     /* Glow violet externe */
     box-shadow: 
-        0 0 25px rgba(157, 78, 221, 0.6),
-        0 0 50px rgba(123, 44, 191, 0.4),
-        0 25px 60px rgba(0, 0, 0, 0.8);
+    0 0 25px rgba(157, 78, 221, 0.6),
+    0 0 50px rgba(123, 44, 191, 0.4),
+    0 25px 60px rgba(0, 0, 0, 0.8);
     
     transition: all 0.5s ease;
 }
@@ -1122,7 +1189,7 @@ a {
 .carte-image {
     position: relative;
     width: 100%;
-    height: 240px;
+    height: 200px;
     flex-shrink: 0;
     overflow: hidden;
 }
@@ -1152,8 +1219,8 @@ a {
     
     border: 2px solid rgba(157, 78, 221, 0.6);
     box-shadow: 
-        0 0 20px rgba(157, 78, 221, 0.8),
-        0 4px 15px rgba(0, 0, 0, 0.6);
+    0 0 20px rgba(157, 78, 221, 0.8),
+    0 4px 15px rgba(0, 0, 0, 0.6);
 }
 
 /* Image */
@@ -1179,8 +1246,8 @@ a {
     
     /* Fond légèrement différent pour contraste */
     background: linear-gradient(180deg, 
-        rgba(15, 15, 22, 0.9) 0%, 
-        rgba(10, 10, 18, 0.98) 100%
+    rgba(15, 15, 22, 0.9) 0%, 
+    rgba(10, 10, 18, 0.98) 100%
     );
 }
 
@@ -1219,8 +1286,8 @@ a {
     
     border: 1.5px solid rgba(157, 78, 221, 0.5);
     box-shadow: 
-        0 4px 20px rgba(157, 78, 221, 0.6),
-        0 0 30px rgba(123, 44, 191, 0.4);
+    0 4px 20px rgba(157, 78, 221, 0.6),
+    0 0 30px rgba(123, 44, 191, 0.4);
     
     transition: all 0.3s ease;
 }
@@ -1228,14 +1295,14 @@ a {
 .btn-veille:hover {
     transform: translateY(-2px);
     box-shadow: 
-        0 6px 28px rgba(157, 78, 221, 0.8),
-        0 0 45px rgba(123, 44, 191, 0.6);
+    0 6px 28px rgba(157, 78, 221, 0.8),
+    0 0 45px rgba(123, 44, 191, 0.6);
     background: linear-gradient(135deg, #b565f2 0%, #8c3bd1 100%);
 }
 
 /* ========================================
-   ÉTATS DU CAROUSEL - 5 CARTES VISIBLES
-   ======================================== */
+ÉTATS DU CAROUSEL - 5 CARTES VISIBLES
+======================================== */
 
 /* Carte ACTIVE (centre) - Plus grande et glow intense */
 .swiper-slide-active .veilleCarte {
@@ -1243,10 +1310,10 @@ a {
     
     border-color: rgba(157, 78, 221, 0.95);
     box-shadow: 
-        0 0 40px rgba(157, 78, 221, 0.9),
-        0 0 80px rgba(123, 44, 191, 0.7),
-        0 0 120px rgba(101, 19, 148, 0.5),
-        0 30px 80px rgba(0, 0, 0, 0.9);
+    0 0 40px rgba(157, 78, 221, 0.9),
+    0 0 80px rgba(123, 44, 191, 0.7),
+    0 0 120px rgba(101, 19, 148, 0.5),
+    0 30px 80px rgba(0, 0, 0, 0.9);
 }
 
 .swiper-slide-active .carte-image img {
@@ -1263,18 +1330,18 @@ a {
 
 .swiper-slide-prev .veilleCarte {
     transform: 
-        translateX(-35px) 
-        rotateY(12deg) 
-        translateZ(-80px) 
-        scale(0.88);
+    translateX(-35px) 
+    rotateY(12deg) 
+    translateZ(-80px) 
+    scale(0.88);
 }
 
 .swiper-slide-next .veilleCarte {
     transform: 
-        translateX(35px) 
-        rotateY(-12deg) 
-        translateZ(-80px) 
-        scale(0.88);
+    translateX(35px) 
+    rotateY(-12deg) 
+    translateZ(-80px) 
+    scale(0.88);
 }
 
 /* Cartes plus éloignées (2e de chaque côté) */
@@ -1311,16 +1378,81 @@ a {
     width: 36px;
     border-radius: 5px;
     box-shadow: 
-        0 0 18px rgba(157, 78, 221, 1),
-        0 0 35px rgba(123, 44, 191, 0.7);
+    0 0 18px rgba(157, 78, 221, 1),
+    0 0 35px rgba(123, 44, 191, 0.7);
 }
 
 /* Hover sur carte non-active */
 .swiper-slide:not(.swiper-slide-active) .veilleCarte:hover {
     border-color: rgba(157, 78, 221, 0.85);
     box-shadow: 
-        0 0 35px rgba(157, 78, 221, 0.75),
-        0 0 65px rgba(123, 44, 191, 0.55);
+    0 0 35px rgba(157, 78, 221, 0.75),
+    0 0 65px rgba(123, 44, 191, 0.55);
+}
+
+/* === BOUTONS NAVIGATION SWIPER === */
+
+.veille-btn-prev,
+.veille-btn-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(157, 78, 221, 0.5);
+    background: rgba(15, 15, 22, 0.85);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--color-accent);
+    box-shadow: 0 0 18px rgba(157, 78, 221, 0.35);
+    transition: all 0.3s ease;
+}
+
+/* Flèches SVG via ::after */
+.veille-btn-prev::after,
+.veille-btn-next::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid var(--color-accent);
+    border-right: 2px solid var(--color-accent);
+}
+
+.veille-btn-prev::after {
+    transform: rotate(-135deg) translate(-2px, 2px);
+}
+
+.veille-btn-next::after {
+    transform: rotate(45deg) translate(-2px, 2px);
+}
+
+.veille-btn-prev { left: 16px; }
+.veille-btn-next { right: 16px; }
+
+.veille-btn-prev:hover,
+.veille-btn-next:hover {
+    background: linear-gradient(135deg, rgba(101, 19, 148, 0.8), rgba(160, 30, 156, 0.8));
+    border-color: rgba(157, 78, 221, 0.9);
+    box-shadow:
+        0 0 25px rgba(157, 78, 221, 0.7),
+        0 0 50px rgba(123, 44, 191, 0.4);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Masquer les flèches par défaut de Swiper */
+.veille-btn-prev.swiper-button-disabled,
+.veille-btn-next.swiper-button-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 @media (max-width: 968px) {
@@ -1404,12 +1536,11 @@ a {
     }
     
     .swiper-slide {
-        width: 290px !important;
-        height: 480px;
+        height: 620px;
     }
     
     .carte-image {
-        height: 210px;
+        height: 280px;
     }
     
     .carte-content h3 {
@@ -1433,53 +1564,57 @@ a {
     
     .projetGrid {
         padding: 0 16px; 
-        gap: 16px;    }
-        .boutonScroll {
-            width: 36px;
-            height: 36px;
-            opacity: 0.85;
-        }
-        .filters {
-            position: relative;
-            padding-bottom: 14px;
-        }
-        
-        .filterBouton {
-            font-size: 0.85rem;
-            padding: 8px 14px;
-        }
-        
-        .filterSlider {
-            height: 2px;
-            bottom: 4px;
-            border-radius: 2px;
-            opacity: 0.8;
-        }
+        gap: 16px;    
     }
+    .boutonScroll {
+        width: 36px;
+        height: 36px;
+        opacity: 0.85;
+    }
+    .filters {
+        position: relative;
+        padding-bottom: 14px;
+    }
+    
+    .filterBouton {
+        font-size: 0.85rem;
+        padding: 8px 14px;
+    }
+    
+    .filterSlider {
+        height: 2px;
+        bottom: 4px;
+        border-radius: 2px;
+        opacity: 0.8;
+    }
+    
+    .split-wrap { grid-template-columns:1fr; }
+    .split-wrap::after { display:none; }
+    .split-center-label { display:none; }
+    .split-panel { min-height:320px; }
     
     .presSousTitre {
         font-size: clamp(2rem, 5vw, 1.8rem);
     }
-
-        .swiper-slide {
-        width: 270px !important;
-        height: 450px;
+    
+    .swiper-slide {
+        height: 580px;
     }
     
     .carte-image {
-        height: 190px;
+        height: 260px;
     }
     
     .badge-tech {
         width: 48px;
         height: 48px;
         font-size: 0.7rem;
+    }   
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms ;
+        animation-iteration-count: 1;
+        transition-duration: 0.01ms ;
     }
-
-    @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-            animation-duration: 0.01ms ;
-            animation-iteration-count: 1;
-            transition-duration: 0.01ms ;
-        }
-    }
+}
