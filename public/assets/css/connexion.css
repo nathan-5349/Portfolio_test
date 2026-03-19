@@ -1,7 +1,7 @@
 @import url(style.css);
 
 .siteHeader {
-  font-family: "Dancing Script";
+  font-family: var(--font-body);
   background-image: url("../image/fondAccueuil.webp");
   background-size: cover;
   background-position: center;
@@ -12,6 +12,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.formulaire h3 {
+  font-family: var(--font-display);
 }
 
 .formulaire {

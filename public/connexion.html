@@ -9,10 +9,10 @@
 </head>
 <body>
     <main class="siteHeader">
-        <form class="formulaire" method="POST" action="../src/login.php">
+        <form class="formulaire" id="formConnexion">
             <h3>Connexion</h3>
             <label for="motdepasse">Mot de passe :</label>
-            <input type="password" id="motdepasse" name="password" placeholder="Entrez le mot de passe" required>
+            <input type="password" id="motdepasse" name="password" placeholder="Entrez le mot de passe" required autocomplete="current-password">
             <button type="submit" class="btn-login">Se connecter</button>
             <button type="button" class="btn-retour" onclick="window.location.href='index.html'">
                 Retour
@@ -22,4 +22,3 @@
         </main>
     </body>
     </html>
-    
