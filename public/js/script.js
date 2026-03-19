@@ -603,122 +603,7 @@ navLinks.forEach(link => {
     });
 });
 
-
-// ===========================
-// Modal Projets
-// ===========================
-(function() {
-    const overlay = document.getElementById('projetModal');
-    if (!overlay) return;
-    
-    const modalClose = document.getElementById('modalClose');
-    const modalTitre = document.getElementById('modalTitre');
-    const modalDesc = document.getElementById('modalDesc');
-    const modalImage = document.getElementById('modalImage');
-    const modalTags = document.getElementById('modalTags');
-    const modalMeta = document.getElementById('modalMeta');
-    const modalActions = document.getElementById('modalActions');
-    
-    function openModal(carte) {
-        const d = carte.dataset;
-        modalTitre.textContent = d.modalTitre || '';
-        modalDesc.textContent = d.modalDesc || '';
-        modalImage.src = d.modalImg || '';
-        modalImage.alt = d.modalTitre || '';
-        
-        // Tags
-        modalTags.innerHTML = '';
-        (d.modalTags || '').split(',').forEach(t => {
-            const span = document.createElement('span');
-            span.className = 'tag';
-            span.textContent = t.trim();
-            modalTags.appendChild(span);
-        });
-        
-        // Meta
-        modalMeta.innerHTML = '';
-        if (d.modalType) {
-            modalMeta.innerHTML += `<span class="modal-meta-item"><strong>Type</strong>${d.modalType}</span>`;
-        }
-        if (d.modalAnnee) {
-            modalMeta.innerHTML += `<span class="modal-meta-item"><strong>Année</strong>${d.modalAnnee}</span>`;
-        }
-        if (d.modalStatut) {
-            modalMeta.innerHTML += `<span class="modal-meta-item modal-statut-encours">${d.modalStatut}</span>`;
-        }
-        
-        // Actions (lien GitHub si défini)
-        modalActions.innerHTML = '';
-        if (d.modalGithub) {
-            modalActions.innerHTML = `<a href="${d.modalGithub}" target="_blank" rel="noopener noreferrer" class="bouton">
-                <span>Voir le code</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
-                </svg>
-            </a>`;
-        }
-        
-        overlay.classList.add('open');
-        overlay.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        modalClose.focus();
-    }
-    
-    function closeModal() {
-        overlay.classList.remove('open');
-        overlay.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-    }
-    
-    // Ouvrir au clic sur une carte
-    document.querySelectorAll('.projetCarte').forEach(carte => {
-        carte.addEventListener('click', () => openModal(carte));
-        carte.setAttribute('role', 'button');
-        carte.setAttribute('tabindex', '0');
-        carte.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(carte); }
-        });
-    });
-    
-    modalClose.addEventListener('click', closeModal);
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-})();
-
-// ===========================
-// Page Connexion — mot de passe côté client
-// ===========================
-(function() {
-    const form = document.getElementById('formConnexion');
-    if (!form) return;
-    
-    const MOT_DE_PASSE = 'NathanBTS2025!';
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const input = document.getElementById('motdepasse');
-        if (!input) return;
-        
-        if (input.value === MOT_DE_PASSE) {
-            window.open('../documents/tableaudesynthese.pdf', '_blank');
-        } else {
-            const notif = document.getElementById('notif');
-            if (notif) {
-                notif.textContent = '❌ Mot de passe incorrect !';
-                notif.classList.add('show');
-                setTimeout(() => notif.classList.remove('show'), 3000);
-            }
-            input.value = '';
-            input.focus();
-            input.style.borderColor = 'rgba(239, 68, 68, 0.7)';
-            input.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
-            setTimeout(() => {
-                input.style.borderColor = '';
-                input.style.boxShadow = '';
-            }, 2000);
-        }
-    });
-})();
+// Easter egg console
 console.log(`
 ╔═══════════════════════════════════════╗
 ║                                       ║
@@ -738,30 +623,16 @@ console.log(`
 // Swiper Carousel 3D - 5 cartes visibles comme l'image
 // ===========================
 new Swiper(".veilleSwiper", {
-    effect: "coverflow",
     centeredSlides: true,
-    slidesPerView: "auto",  // Auto avec largeur fixe 280px dans CSS
+    slidesPerView: 1.5,
+    spaceBetween: 24,
     grabCursor: true,
     loop: true,
-    speed: 600,
-
-    coverflowEffect: {
-        rotate: 0,
-        stretch: 80,        // Espacement pour 5 cartes (2+1+2) de 280px
-        depth: 200,
-        modifier: 1,
-        slideShadows: false,
-    },
+    speed: 500,
 
     pagination: {
         el: ".swiper-pagination",
         clickable: true,
-        dynamicBullets: false,
-    },
-
-    navigation: {
-        nextEl: ".veille-btn-next",
-        prevEl: ".veille-btn-prev",
     },
 
     keyboard: {
@@ -769,17 +640,13 @@ new Swiper(".veilleSwiper", {
     },
 
     breakpoints: {
-        320: {
-            slidesPerView: 1,
-            coverflowEffect: { stretch: 0, depth: 100 }
+        640: {
+            slidesPerView: 1.8,
+            spaceBetween: 28,
         },
-        768: {
-            slidesPerView: "auto",
-            coverflowEffect: { stretch: 60, depth: 150 }
-        },
-        1024: {
-            slidesPerView: "auto",
-            coverflowEffect: { stretch: 80, depth: 200 }
+        900: {
+            slidesPerView: 3,
+            spaceBetween: 32,
         }
     }
 });
