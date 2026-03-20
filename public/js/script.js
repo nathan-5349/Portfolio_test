@@ -585,23 +585,129 @@ const mobileMenu = document.querySelector('.mobileMenu');
 const body = document.body;
 const navLinks = document.querySelectorAll('.mobileMenu a');
 
-function toggleMenu() {
-    const isOpen = burger.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
-    body.classList.toggle('no-scroll');
-    burger.setAttribute('aria-expanded', isOpen);
+if (burger && mobileMenu) {
+    function toggleMenu() {
+        const isOpen = burger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+        body.classList.toggle('no-scroll');
+        burger.setAttribute('aria-expanded', isOpen);
+    }
+
+    burger.addEventListener('click', toggleMenu);
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            burger.classList.remove('open');
+            mobileMenu.classList.remove('open');
+            body.classList.remove('no-scroll');
+            burger.setAttribute('aria-expanded', 'false');
+        });
+    });
 }
 
-burger.addEventListener('click', toggleMenu);
+// ===========================
+// Page Connexion — mot de passe côté client
+// ===========================
+const formConnexion = document.getElementById('formConnexion');
 
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        burger.classList.remove('open');
-        mobileMenu.classList.remove('open');
-        body.classList.remove('no-scroll');
-        burger.setAttribute('aria-expanded', 'false');
+if (formConnexion) {
+    const MOT_DE_PASSE = 'NathanBTS2025!';
+
+    formConnexion.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const input = document.getElementById('motdepasse');
+        if (!input) return;
+
+        if (input.value === MOT_DE_PASSE) {
+            window.open('assets/documents/tableauSynthese.pdf', '_blank');
+        } else {
+            const notif = document.getElementById('notif');
+            if (notif) {
+                notif.textContent = '❌ Mot de passe incorrect !';
+                notif.classList.add('show');
+                setTimeout(() => notif.classList.remove('show'), 3000);
+            }
+            input.value = '';
+            input.focus();
+            input.style.borderColor = 'rgba(239, 68, 68, 0.7)';
+            input.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
+            setTimeout(() => {
+                input.style.borderColor = '';
+                input.style.boxShadow = '';
+            }, 2000);
+        }
     });
-});
+}
+
+// ===========================
+// Modal Projets
+// ===========================
+const projetModal = document.getElementById('projetModal');
+
+if (projetModal) {
+    const modalClose = document.getElementById('modalClose');
+    const modalTitre = document.getElementById('modalTitre');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalImage = document.getElementById('modalImage');
+    const modalTags = document.getElementById('modalTags');
+    const modalMeta = document.getElementById('modalMeta');
+    const modalActions = document.getElementById('modalActions');
+
+    function openModal(carte) {
+        const d = carte.dataset;
+        modalTitre.textContent = d.modalTitre || '';
+        modalDesc.textContent = d.modalDesc || '';
+        modalImage.src = d.modalImg || '';
+        modalImage.alt = d.modalTitre || '';
+
+        modalTags.innerHTML = '';
+        (d.modalTags || '').split(',').forEach(t => {
+            const span = document.createElement('span');
+            span.className = 'tag';
+            span.textContent = t.trim();
+            modalTags.appendChild(span);
+        });
+
+        modalMeta.innerHTML = '';
+        if (d.modalType) modalMeta.innerHTML += `<span class="modal-meta-item"><strong>Type&nbsp;</strong>${d.modalType}</span>`;
+        if (d.modalAnnee) modalMeta.innerHTML += `<span class="modal-meta-item"><strong>Année&nbsp;</strong>${d.modalAnnee}</span>`;
+        if (d.modalStatut) modalMeta.innerHTML += `<span class="modal-meta-item modal-statut-encours">${d.modalStatut}</span>`;
+
+        modalActions.innerHTML = '';
+        if (d.modalGithub) {
+            modalActions.innerHTML = `<a href="${d.modalGithub}" target="_blank" rel="noopener noreferrer" class="bouton">
+                <span>Voir le code</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+                </svg>
+            </a>`;
+        }
+
+        projetModal.classList.add('open');
+        projetModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (modalClose) modalClose.focus();
+    }
+
+    function closeModal() {
+        projetModal.classList.remove('open');
+        projetModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.projetCarte').forEach(carte => {
+        carte.addEventListener('click', () => openModal(carte));
+        carte.setAttribute('role', 'button');
+        carte.setAttribute('tabindex', '0');
+        carte.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(carte); }
+        });
+    });
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    projetModal.addEventListener('click', (e) => { if (e.target === projetModal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+}
 
 // Easter egg console
 console.log(`
