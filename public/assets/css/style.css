@@ -360,7 +360,7 @@ a {
 /* --- Ajustement spécifique pour la section Formation --- */
 
 #formation {
-    height: 100vh;
+    height: auto;
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -1609,8 +1609,9 @@ Section Veille - Style EXACT de l'image
         --spacing-xl: 4rem;
     }
     
-    .formationCarte {
-        height: 450px;
+    #formation {
+        height: auto;
+        overflow: visible;
     }
     
     .projetGrid {
