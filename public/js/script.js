@@ -3,7 +3,7 @@
 // ===========================
 window.onload = function () {
     const texteElement = document.getElementById("typewriter");
-    const mots = ["développeur", "en BTS SIO", "en alternance"];
+    const mots = ["développeur", "en licence info", "en alternance"];
     let indexMot = 0;
     let indexLettre = 0;
     let suppression = false;
